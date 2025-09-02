@@ -27,5 +27,6 @@ public class Booking {
     private LocalDate checkIn; // check-in date
     private LocalDate checkOut; // check-out date
 
-    private String status; // CONFIRMED or CANCELLED
+    private String status; // PENDING, PAID, CANCELLED
+
 }

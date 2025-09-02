@@ -35,7 +35,7 @@ public class AuthController {
             return "signup";
         }
 
-        userService.registerUser(username, password, "ADMIN"); // default role USER
+        userService.registerUser(username, password, "USER"); // default role USER
         model.addAttribute("success", "Registration successful! Please login.");
         return "login"; // after signup, redirect to login page
     }

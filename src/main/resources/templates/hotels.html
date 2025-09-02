@@ -8,6 +8,47 @@
     />
   </head>
   <body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">Hotel Booking</a>
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav ms-auto">
+            <!-- Always visible -->
+            <li class="nav-item">
+              <a href="/hotels" class="nav-link">Hotels</a>
+            </li>
+
+            <!-- User only -->
+            <li
+              th:if="${#authorization.expression('hasRole(''USER'')')}"
+              class="nav-item"
+            >
+              <a href="/bookings" class="nav-link">My Bookings</a>
+            </li>
+
+            <!-- Admin only -->
+            <li
+              th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+              class="nav-item"
+            >
+              <a href="/admin/dashboard" class="nav-link">Dashboard</a>
+            </li>
+            <li
+              th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+              class="nav-item"
+            >
+              <a href="/hotels/add" class="nav-link">Add Hotel</a>
+            </li>
+
+            <!-- Always visible -->
+            <li class="nav-item">
+              <a href="/logout" class="nav-link">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
     <div class="container mt-5">
       <h2 class="mb-3">Available Hotels</h2>
       <a

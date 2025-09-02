@@ -7,34 +7,76 @@
       rel="stylesheet"
     />
   </head>
-  <body
-    class="bg-light d-flex align-items-center justify-content-center"
-    style="height: 100vh"
-  >
-    <div class="card p-4 shadow" style="width: 400px">
-      <h3 class="text-center mb-3">Book Hotel</h3>
-      <p th:text="'Hotel: ' + ${hotel.name}" class="fw-bold"></p>
-      <p
-        th:if="${error}"
-        th:text="${error}"
-        class="text-danger text-center"
-      ></p>
+  <body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">Hotel Booking</a>
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav ms-auto">
+            <!-- Always visible -->
+            <li class="nav-item">
+              <a href="/hotels" class="nav-link">Hotels</a>
+            </li>
 
-      <form method="post" th:action="@{'/bookings/new/' + ${hotel.id}}">
-        <div class="mb-3">
-          <label class="form-label">Check-In Date</label>
-          <input type="date" name="checkIn" class="form-control" required />
+            <!-- User only -->
+            <li
+              th:if="${#authorization.expression('hasRole(''USER'')')}"
+              class="nav-item"
+            >
+              <a href="/bookings" class="nav-link">My Bookings</a>
+            </li>
+
+            <!-- Admin only -->
+            <li
+              th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+              class="nav-item"
+            >
+              <a href="/admin/dashboard" class="nav-link">Dashboard</a>
+            </li>
+            <li
+              th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+              class="nav-item"
+            >
+              <a href="/hotels/add" class="nav-link">Add Hotel</a>
+            </li>
+
+            <!-- Always visible -->
+            <li class="nav-item">
+              <a href="/logout" class="nav-link">Logout</a>
+            </li>
+          </ul>
         </div>
+      </div>
+    </nav>
+    <div
+      class="d-flex align-items-center justify-content-center"
+      style="height: 100vh; padding-top: 80px"
+    >
+      <div class="card p-4 shadow" style="width: 400px">
+        <h3 class="text-center mb-3">Book Hotel</h3>
+        <p th:text="'Hotel: ' + ${hotel.name}" class="fw-bold"></p>
+        <p
+          th:if="${error}"
+          th:text="${error}"
+          class="text-danger text-center"
+        ></p>
 
-        <div class="mb-3">
-          <label class="form-label">Check-Out Date</label>
-          <input type="date" name="checkOut" class="form-control" required />
-        </div>
+        <form method="post" th:action="@{'/bookings/new/' + ${hotel.id}}">
+          <div class="mb-3">
+            <label class="form-label">Check-In Date</label>
+            <input type="date" name="checkIn" class="form-control" required />
+          </div>
 
-        <button type="submit" class="btn btn-primary w-100">
-          Confirm Booking
-        </button>
-      </form>
+          <div class="mb-3">
+            <label class="form-label">Check-Out Date</label>
+            <input type="date" name="checkOut" class="form-control" required />
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100">
+            Confirm Booking
+          </button>
+        </form>
+      </div>
     </div>
   </body>
 </html>

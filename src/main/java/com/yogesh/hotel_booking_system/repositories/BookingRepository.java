@@ -13,17 +13,20 @@ import java.time.LocalDate;
 // Repository for booking operations
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
-    List<Booking> findByUser(User user); // get bookings for a user
+        List<Booking> findByUser(User user); // get bookings for a user
 
-    @Query("SELECT b FROM Booking b WHERE b.hotel = :hotel AND b.status = 'CONFIRMED' " +
-            "AND b.checkIn <= :checkOut AND b.checkOut >= :checkIn")
-    List<Booking> findConflictingBookings(@Param("hotel") Hotel hotel,
-            @Param("checkIn") LocalDate checkIn,
-            @Param("checkOut") LocalDate checkOut);
+        // Conflict check for one hotel
+        @Query("SELECT b FROM Booking b WHERE b.hotel = :hotel " +
+                        "AND (b.status = 'PENDING' OR b.status = 'PAID') " +
+                        "AND b.checkIn <= :checkOut AND b.checkOut >= :checkIn")
+        List<Booking> findConflictingBookings(@Param("hotel") Hotel hotel,
+                        @Param("checkIn") LocalDate checkIn,
+                        @Param("checkOut") LocalDate checkOut);
 
-    @Query("SELECT b.hotel.id FROM Booking b WHERE b.status = 'CONFIRMED' " +
-            "AND b.checkIn <= :checkOut AND b.checkOut >= :checkIn")
-    List<Long> findHotelIdsWithConflicts(@Param("checkIn") LocalDate checkIn,
-            @Param("checkOut") LocalDate checkOut);
+        @Query("SELECT b.hotel.id FROM Booking b WHERE " +
+                        "(b.status = 'PENDING' OR b.status = 'PAID') " +
+                        "AND b.checkIn <= :checkOut AND b.checkOut >= :checkIn")
+        List<Long> findHotelIdsWithConflicts(@Param("checkIn") LocalDate checkIn,
+                        @Param("checkOut") LocalDate checkOut);
 
 }

@@ -2,6 +2,9 @@ package com.yogesh.hotel_booking_system.services;
 
 import com.yogesh.hotel_booking_system.models.User;
 import com.yogesh.hotel_booking_system.repositories.UserRepository;
+
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,10 +13,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
-
+    private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    @Autowired
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     // Register new user
     public User registerUser(String username, String password, String role) {
@@ -29,4 +35,9 @@ public class UserService {
     public boolean isUserExists(String username) {
         return userRepository.findByUsername(username).isPresent();
     }
+
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
 }

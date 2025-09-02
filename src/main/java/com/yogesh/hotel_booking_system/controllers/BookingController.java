@@ -63,7 +63,7 @@ public class BookingController {
         LocalDate checkInDate = LocalDate.parse(checkIn);
         LocalDate checkOutDate = LocalDate.parse(checkOut);
 
-        // Check for conflicts
+        // Check for conflicts (PENDING or PAID handled in repository query)
         List<Booking> conflicts = bookingRepository.findConflictingBookings(hotel, checkInDate, checkOutDate);
 
         if (!conflicts.isEmpty()) {
@@ -78,10 +78,11 @@ public class BookingController {
         booking.setUser(user);
         booking.setCheckIn(checkInDate);
         booking.setCheckOut(checkOutDate);
-        booking.setStatus("CONFIRMED");
-
+        booking.setStatus("PENDING"); // only pending at first
         bookingRepository.save(booking);
-        return "redirect:/bookings";
+
+        // redirect to payment page
+        return "redirect:/payments/new/" + booking.getId();
     }
 
     // Cancel a booking (USER only)

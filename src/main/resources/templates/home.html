@@ -6,20 +6,52 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <style>
+      body {
+        background: linear-gradient(to right, #e3f2fd, #fce4ec);
+        min-height: 100vh;
+      }
+      .dashboard-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+      }
+    </style>
   </head>
-  <body class="bg-light">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">Hotel Booking</a>
+        <a class="navbar-brand fw-bold" href="#">HotelBooking</a>
         <div class="collapse navbar-collapse">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
               <a href="/hotels" class="nav-link">Hotels</a>
             </li>
-            <!-- Show only for ADMIN -->
-            <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+
+            <!-- Visible only for USER -->
+            <li
+              th:if="${#authorization.expression('hasRole(''USER'')')}"
+              class="nav-item"
+            >
+              <a href="/bookings" class="nav-link">My Bookings</a>
+            </li>
+
+            <!-- Visible only for ADMIN -->
+            <li
+              th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+              class="nav-item"
+            >
+              <a href="/admin/dashboard" class="nav-link">Dashboard</a>
+            </li>
+            <li
+              th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+              class="nav-item"
+            >
               <a href="/hotels/add" class="nav-link">Add Hotel</a>
             </li>
+
             <li class="nav-item">
               <a href="/logout" class="nav-link">Logout</a>
             </li>
@@ -28,12 +60,51 @@
       </div>
     </nav>
 
-    <div class="container mt-5 text-center">
-      <h1 class="mb-3">Welcome to Your Dashboard</h1>
-      <p class="lead">You are now logged in successfully.</p>
+    <div class="container py-5 text-center">
+      <h1 class="fw-bold mb-3">Welcome to Your Dashboard</h1>
+      <p class="lead text-muted mb-5">Quick access to everything you need</p>
 
-      <a href="/hotels" class="btn btn-primary me-2">View Hotels</a>
-      <a href="/bookings" class="btn btn-success">My Bookings</a>
+      <!-- USER dashboard -->
+      <div
+        th:if="${#authorization.expression('hasRole(''USER'')')}"
+        class="row g-4 justify-content-center"
+      >
+        <div class="col-md-4">
+          <div class="card dashboard-card shadow p-4">
+            <h4 class="mb-3">Browse Hotels</h4>
+            <p class="text-muted">Explore and book your favorite stays.</p>
+            <a href="/hotels" class="btn btn-primary w-100">View Hotels</a>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card dashboard-card shadow p-4">
+            <h4 class="mb-3">My Bookings</h4>
+            <p class="text-muted">See your upcoming and past reservations.</p>
+            <a href="/bookings" class="btn btn-success w-100">My Bookings</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADMIN dashboard -->
+      <div
+        th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+        class="row g-4 justify-content-center"
+      >
+        <div class="col-md-4">
+          <div class="card dashboard-card shadow p-4">
+            <h4 class="mb-3">Manage Hotels</h4>
+            <p class="text-muted">Add, update or remove hotel listings.</p>
+            <a href="/hotels" class="btn btn-primary w-100">View Hotels</a>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card dashboard-card shadow p-4">
+            <h4 class="mb-3">Add New Hotel</h4>
+            <p class="text-muted">Expand your platform with new hotels.</p>
+            <a href="/hotels/add" class="btn btn-warning w-100">Add Hotel</a>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>
