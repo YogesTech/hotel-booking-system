@@ -15,7 +15,7 @@ RUN mvn clean package -DskipTests
 # ==============================
 # Run Stage (Slim JDK)
 # ==============================
-FROM openjdk:21-jdk-slim
+FROM eclipse-temurin:21-jdk-jammy
 
 # Set working directory
 WORKDIR /app
